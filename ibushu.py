@@ -44,7 +44,7 @@ def main():
         # 等输入框出现并填写
         field = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, USER_INPUT_SELECTOR)))
         field.clear()
-        field.send_keys(USER)
+        field.send_keys(USER_NAME)
 
         # 等输入框出现并填写
         field = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, PWD_INPUT_SELECTOR)))
