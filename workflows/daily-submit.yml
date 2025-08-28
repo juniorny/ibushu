@@ -1,0 +1,52 @@
+name: Daily Selenium Submit
+
+on:
+  schedule:
+    # 广东时间 22:00 => UTC 14:00
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
+            | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] \
+            http://dl.google.com/linux/chrome/deb/ stable main" \
+            | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Run Selenium submit
+        env:
+          FORM_URL:             ${{ secrets.FORM_URL }}
+          VERIFY_SELECTOR:      ${{ secrets.VERIFY_SELECTOR }}
+          USER_INPUT_SELECTOR:  ${{ secrets.USER_INPUT_SELECTOR }}
+          PWD_INPUT_SELECTOR:   ${{ secrets.PWD_INPUT_SELECTOR }}
+          SUBMIT_SELECTOR:      ${{ secrets.SUBMIT_SELECTOR }}
+          TIMEOUT:              "25"
+        run: python submit_selenium.py
+
+      - name: Upload screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: after-screenshot
+          path: after.png
