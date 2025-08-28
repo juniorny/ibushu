@@ -42,7 +42,7 @@ jobs:
           PWD_INPUT_SELECTOR:   ${{ secrets.PWD_INPUT_SELECTOR }}
           SUBMIT_SELECTOR:      ${{ secrets.SUBMIT_SELECTOR }}
           TIMEOUT:              "25"
-        run: python submit_selenium.py
+        run: python ibushu.py
 
       - name: Upload screenshot
         if: always()
