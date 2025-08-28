@@ -36,12 +36,10 @@ jobs:
 
       - name: Run Selenium submit
         env:
-          FORM_URL:             ${{ secrets.FORM_URL }}
-          VERIFY_SELECTOR:      ${{ secrets.VERIFY_SELECTOR }}
-          USER_INPUT_SELECTOR:  ${{ secrets.USER_INPUT_SELECTOR }}
-          PWD_INPUT_SELECTOR:   ${{ secrets.PWD_INPUT_SELECTOR }}
-          SUBMIT_SELECTOR:      ${{ secrets.SUBMIT_SELECTOR }}
-          TIMEOUT:              "25"
+          USER_NAME: ${{ secrets.USER_NAME }}
+          PASSWORD:  ${{ secrets.PASSWORD }}
+          MAX_STEP:  ${{ secrets.MAX_STEP }}
+          MIN_STEP:  ${{ secrets.MIN_STEP }}
         run: python ibushu.py
 
       - name: Upload screenshot
