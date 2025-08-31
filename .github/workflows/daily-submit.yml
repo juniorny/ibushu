@@ -2,8 +2,8 @@ name: Daily Selenium Submit
 
 on:
   schedule:
-    # 广东时间 18:00 => UTC 10:00
-    - cron: "0 10 * * *"
+    # 广东时间 15:00 => UTC 07:00
+    - cron: "0 07 * * *"
   workflow_dispatch:
 
 jobs:
