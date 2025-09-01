@@ -1,50 +1,31 @@
-name: Daily Selenium Submit
+name: Run Zepp Script
 
 on:
   schedule:
-    # 广东时间 15:00 => UTC 07:00
-    - cron: "0 07 * * *"
-  workflow_dispatch:
+    # 每天北京时间 15 点运行（UTC 时间减 8 小时）
+    - cron: '0 7 * * *'
+  workflow_dispatch: # 允许手动触发
 
 jobs:
-  submit:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.x'
 
-      - name: Install Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget gnupg
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
-            | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] \
-            http://dl.google.com/linux/chrome/deb/ stable main" \
-            | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+      - name: Install dependencies
+        run: pip install requests
 
-      - name: Install Python deps
-        run: pip install -r requirements.txt
-
-      - name: Run Selenium submit
+      - name: Run script
         env:
-          USER_NAME: ${{ secrets.USER_NAME }}
-          PASSWORD:  ${{ secrets.PASSWORD }}
-          MAX_STEP:  ${{ secrets.MAX_STEP }}
-          MIN_STEP:  ${{ secrets.MIN_STEP }}
-        run: python ibushu.py
-
-      - name: Upload screenshot
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: after-screenshot
-          path: after.png
+          ZEPP_ACCOUNT: ${{ secrets.ZEPP_ACCOUNT }}
+          ZEPP_PASSWORD: ${{ secrets.ZEPP_PASSWORD }}
+          MIN_STEP: ${{ secrets.MIN_STEP }}
+          MAX_STEP: ${{ secrets.MAX_STEP }}
+        run: python submit_step.py
