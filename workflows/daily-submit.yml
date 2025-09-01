@@ -2,8 +2,8 @@ name: Daily Selenium Submit
 
 on:
   schedule:
-    # 广东时间 22:00 => UTC 14:00
-    - cron: "0 14 * * *"
+    # 广东时间 15:00 => UTC 07:00
+    - cron: "0 07 * * *"
   workflow_dispatch:
 
 jobs:
@@ -36,13 +36,11 @@ jobs:
 
       - name: Run Selenium submit
         env:
-          FORM_URL:             ${{ secrets.FORM_URL }}
-          VERIFY_SELECTOR:      ${{ secrets.VERIFY_SELECTOR }}
-          USER_INPUT_SELECTOR:  ${{ secrets.USER_INPUT_SELECTOR }}
-          PWD_INPUT_SELECTOR:   ${{ secrets.PWD_INPUT_SELECTOR }}
-          SUBMIT_SELECTOR:      ${{ secrets.SUBMIT_SELECTOR }}
-          TIMEOUT:              "25"
-        run: python submit_selenium.py
+          USER_NAME: ${{ secrets.USER_NAME }}
+          PASSWORD:  ${{ secrets.PASSWORD }}
+          MAX_STEP:  ${{ secrets.MAX_STEP }}
+          MIN_STEP:  ${{ secrets.MIN_STEP }}
+        run: python ibushu.py
 
       - name: Upload screenshot
         if: always()
