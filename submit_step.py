@@ -14,4 +14,4 @@ data = {
 }
 
 resp = requests.post(url=url, data=data)
-print(resp.status_code)
+print(resp.text)
