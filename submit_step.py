@@ -10,7 +10,7 @@ MAX_STEP = os.environ.get('MAX_STEP')
 data = {
     'zeppAccount': os.environ.get('ZEPP_ACCOUNT'),
     'zeppPassword': os.environ.get('ZEPP_PASSWORD'),
-    'step': random.randint(MIN_STEP, MAX_STEP),
+    'step': random.randint(int(MIN_STEP), int(MAX_STEP)),
 }
 
 resp = requests.post(url=url, data=data)
