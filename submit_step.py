@@ -1,6 +1,7 @@
 import requests
 import random
 import os
+import time
 
 url = 'https://gg.ibushu.com/ibushu/api/submitZepp'
 
