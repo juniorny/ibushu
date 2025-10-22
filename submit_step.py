@@ -15,14 +15,14 @@ data = {
 }
 
 try_time = 0
-while try_time < 10:
+while try_time < 100:
     try:
         resp = requests.post(url=url, data=data)
         print(resp.text)
         if "同步失败" in resp.text:
             raise ValueError("同步失败")
         elif "同步成功" in resp.text:
-            print("同步成功")
+            print("同步成功！")
             break
     except:
         try_time += 1
